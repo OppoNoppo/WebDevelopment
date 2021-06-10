@@ -83,6 +83,8 @@ function createUser($conn, $name, $mail, $uid, $pwd) {
 //  Login
 //
 //
+
+
 function emptyInputLogin($uid, $pwd) {
     $result;
     if ( empty($uid) || empty($pwd)) {
@@ -108,7 +110,15 @@ function loginUser($conn, $uid, $pwd) {
     } 
     else if ($checkPwd === true ) {
         session_start();
-        header("location: ../login.php?error=success");
+        $_SESSION["uid"] = $uidExists["userUid"];
+        $_SESSION["loggedin"] = true;
+        header("location: ../index.php?error=success");
         exit();
     }
 }
+
+// 
+// 
+//  Authentication 
+// 
+// 
