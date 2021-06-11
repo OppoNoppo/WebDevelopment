@@ -14,7 +14,7 @@ if (isset($_GET["uuid"])) {
         echo "UUID is not valid";
         exit();
     }
-    if (uuidInfo($conn, $uuid) == false) {
+    if (ProfileInfo($conn, $uuid) == false) {
         echo "UUID is not valid";
         exit();
     }

@@ -85,6 +85,15 @@ function createUser($conn, $name, $mail, $uid, $pwd) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
+    $sql = "INSERT INTO profiles (userUUID, profileDescription) VALUES (?, 'Using Simple Profile System');";
+    $stmt = mysqli_stmt_init($conn);
+    if(!mysqli_stmt_prepare($stmt, $sql)) {
+        header('Location: ../register.php?error=profilestmtfailed');
+        exit();
+    }
+    mysqli_stmt_bind_param($stmt, 's', $uniqid);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
     header("location: ../login.php?info=registersuccess");
 }
@@ -160,14 +169,20 @@ function GetUserInfo($conn, $uuid) {
     mysqli_stmt_close($stmt);
 }
 
-function GetProfileInfo($conn, $uuid, $table) {
-    $sql = "SELECT * FROM ? WHERE userUUID = ?;";
+// 
+// 
+//  Profile 
+// 
+// 
+
+function GetProfileInfo($conn, $uuid) {
+    $sql = "SELECT * FROM profiles WHERE userUUID = ?;";
     $stmt = mysqli_stmt_init($conn);
     if(!mysqli_stmt_prepare($stmt, $sql)) {
         header('Location: $_SERVER["HTTP_REFERER"]?error=stmtfailed');
         exit();
     }
-    mysqli_stmt_bind_param($stmt, "ss", $table, $uuid);
+    mysqli_stmt_bind_param($stmt, "s", $uuid);
     mysqli_stmt_execute($stmt);
     $resultData = mysqli_stmt_get_result($stmt);
     if(mysqli_num_rows($resultData) > 0) {
@@ -181,46 +196,5 @@ function GetProfileInfo($conn, $uuid, $table) {
     mysqli_stmt_close($stmt);
 }
 
-
-// 
-// 
-//  Profile 
-// 
-// 
-
-// function uuidInfo($conn, $uuid) {
-//     $sql = "SELECT * FROM users WHERE userUUID = ?;";
-//     $stmt = mysqli_stmt_init($conn);
-//     if(!mysqli_stmt_prepare($stmt, $sql)) {
-//         header("location: ../profile.php?error=stmtfailed");
-//         exit();
-//     }
-//     mysqli_stmt_bind_param($stmt, "s", $uuid);
-//     mysqli_stmt_execute($stmt);
-
-//     $resultData = mysqli_stmt_get_result($stmt);
-
-//     if ($row = mysqli_fetch_assoc($resultData)) {
-//         return $row;
-//     } else {
-//         $result = false;
-//         return $result;
-//     }
-//     mysqli_stmt_close($stmt);
-// }
-
-// function getProfileInfo($conn, $uuid) {
-//     $sql = "SELECT * FROM profiles WHERE profileUUID = ? LIMIT 1;";
-//     $stmt = mysqli_stmt_init($stmt);
-//     if(!mysqli_stmt_prepare($stmt, $sql)) {
-//         header('Location: ../profile.php?error=stmtfailed');
-//         exit();
-//     } 
-//     mysqli_stmt_bind_param($stmt, "s", $uuid);
-//     mysqli_stmt_execute($stmt);
-    
-//     $resultData = mysqli_stmt_get_result($stmt);
-    
-// }
 
 
