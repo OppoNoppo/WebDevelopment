@@ -17,6 +17,11 @@ if (isset($_POST["submit"])) {
         exit();
     }
 
+    if (uidExists($conn, $uid, $uid) === false) {
+        header("location: ../login.php?error=wronglogin");
+        exit();
+    }
+
     loginUser($conn, $uid, $pwd);
 } else {
     header("location: ../login.php?error=nosubmit");
