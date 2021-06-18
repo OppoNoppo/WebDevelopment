@@ -136,6 +136,7 @@ function loginUser($conn, $uid, $pwd) {
         $_SESSION["userUUID"] = $uidExists["userUUID"];
         $_SESSION["userMail"] = $uidExists["userMail"];
         $_SESSION["userNoti"] = $uidExists["userNoti"] ? $uidExists["userNoti"] : 'offline';
+        $_SESSION["userStatus"] = $uidExists["userStatus"] ? $uidExists["userStatus"] : 'NULL';
         $_SESSION["loggedin"] = true;
         header("location: ../index.php?error=success");
         exit();
@@ -147,6 +148,34 @@ function loginUser($conn, $uid, $pwd) {
 //  Information 
 // 
 // 
+
+function ValidatePwd($conn, $uuid, $pwdConfirm) {
+    $result;
+    $Info = GetUserInfo($conn, $uuid);
+    if ($Info === false) {
+        $uri = $_SERVER["REFERER"];
+        header("location ../$uri?error=wronglogin");
+        exit();
+    }
+    
+    $pwdHashed = $Info["userPwd"];
+    $checkPwd = password_verify($pwdConfirm, $pwdHashed);
+    if ($checkPwd === false ) {
+        $result = false;
+        return $result;
+    } 
+}
+
+function pwdMatchAdvanced($conn, $UUID, $pwd, $pwdRepeat) {
+    $result;
+    $pwdNewHashed = password_hash($pwdNew, PASSWORD_DEFAULT);
+    $PwdRepeatHashed = password_hash($pwdRepeat, PASSWORD_DEFAULT);
+
+    if ($pwdNewHashed != $PwdRepeatHashed) {
+        $result = false;
+        return $result;
+    }
+}
 
 function GetUserInfo($conn, $uuid) {
     $sql = "SELECT * FROM users WHERE userUUID = ?;";
@@ -167,6 +196,64 @@ function GetUserInfo($conn, $uuid) {
         exit();
     }
     mysqli_stmt_close($stmt);
+}
+
+function refreshSession($conn, $uuid) {
+    $userInfo = GetUserInfo($conn, $uuid);
+
+    if(isset($_SESSION['userUUID'])) {
+        $_SESSION['userUUID'] = $userInfo["userUUID"];
+    }
+    else if(isset($_SESSION['userUid'])) {
+        $_SESSION['userUid'] = $userInfo["userUid"];
+    } 
+    else if(isset($_SESSION['userMail'])) {
+        $_SESSION['userMail'] = $userInfo["userMail"];
+    } 
+    else if(isset($_SESSION['userNoti'])) {
+        $_SESSION["userNoti"] = $userInfo["userNoti"] ? $userInfo["userNoti"] : 'offline';
+    } 
+    else if(isset($_SESSION['userStatus'])) {
+        $_SESSION["userStatus"] = $userInfo["userStatus"] ? $userInfo["userStatus"] : 'NULL';
+    } 
+    else {
+        die('NO ACTIVE SESSION');
+    }
+}
+
+// 
+// 
+//  Edit Profile
+// 
+// 
+
+function saveProfile($conn, $uuid, $uid, $mail, $noti, $dsc, $status, $pwdNew) {
+    // 
+    // 
+    $userInfo = GetUserInfo($conn, $uuid);
+    $sql = "UPDATE users SET userUid = ?, userMail = ?, userNoti = ?, userStatus = ?, userMiniDesc = ?, userPwd = ? WHERE userUUID = ?;";
+    $pwdHashed;
+    if (empty($pwdNew)) {
+        $pwdHashed = $userInfo['userPwd'];
+    } else {
+        $pwdHashed = password_hash($pwdNew, PASSWORD_DEFAULT);
+    }
+    $stmt = mysqli_stmt_init($conn);
+    if(!mysqli_stmt_prepare($stmt, $sql)) {
+        $uri =  $_SERVER['REFERER'];
+        header('Location: ../edit_profile.php?error=stmtfailed');
+        exit();
+    }
+    mysqli_stmt_bind_param($stmt, "sssssss", $uid, $mail, $noti, $status, $dsc, $pwdHashed, $uuid);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    
+    // 
+    // 
+    
+
+
+    refreshSession($conn, $uuid);
 }
 
 // 

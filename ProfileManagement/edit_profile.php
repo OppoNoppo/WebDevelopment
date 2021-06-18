@@ -185,69 +185,97 @@ include "./includes/functions.inc.php";
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <!-- /.container-fluid -->
-    </section>
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <!-- /.container-fluid -->
+      </section>
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">General</h3>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">General</h3>
+              </div>
+              <div class="card-body">
+                <form method="post" action="./includes/edit_profile.inc.php">
+                  <div class="row">
+                    <div class="col-6   form-group">
+                      <label for="uid">Username (*) </label>
+                      <input required type="text" name="uid" id="uid" class="form-control" minlength="1" maxlength="25"
+                        value="<?php echo $_SESSION['userUUID'];?>">
+                    </div>
+                    <div class="col-4 form-group">
+                      <label for="status">Custom Status</label>
+                      <input type="text" name="status" id="status" class="form-control"
+                        value="<?php echo $_SESSION['userStatus'] ? $_SESSION['userStatus'] : 'NULL';?>">
+                    </div>
+                    <div class="col-2 form-group">
+                      <label for="noti">Status (*) </label>
+                      <select name="noti" id="noti" class="form-control custom-select">
+                        <option disabled>Select one</option>
+                        <option <?php if ($_SESSION["userNoti"] == "online"){ echo "selected";}?>>Online</option>
+                        <option <?php if ($_SESSION["userNoti"] == "busy"){ echo "selected";}?>>Busy</option>
+                        <option <?php if ($_SESSION["userNoti"] == "away"){ echo "selected";}?>>Away</option>
+                        <option <?php if ($_SESSION["userNoti"] == "offline"){ echo "selected";}?>>Offline</option>
+                      </select>
+                    </div>
 
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="form-group">
-                <label for="inputName">Username</label>
-                <input type="text" id="inputName" class="form-control" value="<?php echo $_SESSION['userUUID'];?>">
-              </div>
-              <div class="form-group">
-                <label for="inputDescription">Profile Description</label>
-                <textarea id="inputDescription" class="form-control" rows="4">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="desc">Profile Description</label>
+                    <textarea name="desc" id="desc" class="form-control" rows="4">
                 <?php $GetUserInfo = GetUserInfo($conn, $_SESSION['userUUID']); echo $GetUserInfo["userMail"];?>
                 </textarea>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 form-group">
+                      <label for="mail">Mail Address (*) </label>
+                      <input required type="email" name="mail" id="mail" class="form-control"
+                        value="<?php echo $_SESSION["userMail"]?>" pattern="*@-.-">
+                    </div>
+                    <div class="col-6 form-group">
+                      <label for="pwdConfirm">Confirm Password (*) </label>
+                      <input required type="password" name="pwdConfirm" id="pwdConfirm" class="form-control"
+                        placeholder="Old Password">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 form-group">
+                      <label for="pwdNew">New Password</label>
+                      <input type="password" name="pwdNew" id="pwdNew" class="form-control"
+                        placeholder="<?php echo $_SESSION['userUUID']?>">
+                    </div>
+                    <div class="col-6 form-group">
+                      <label for="pwdRepeat">New Password Confirm</label>
+                      <input type="password" name="pwdRepeat" id="pwdRepeat" class="form-control"
+                        placeholder="<?php echo $_SESSION['userUUID']?>">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- <div class="col-8 form-group">
+                      <label>UUID</label>
+                      <input name="uuid" id="uuid" class="form-control" required disabled
+                        value="<?php// $GetUserInfo = GetUserInfo($conn, $_SESSION['userUUID']); echo $GetUserInfo["userUUID"];?>">
+                    </div> -->
+                    <div class="col-4">
+                      <label>* Required</label>
+                      <input style="background-color:rgb(0, 255, 0);" name="submitsave" type="submit" value="Save Changes"
+                        class="btn btn-success form-control">
+                    </div>
+                  </div>
+                </form>
               </div>
-              <div class="form-group">
-                <label for="inputStatus">Status</label>
-                <select id="inputStatus" class="form-control custom-select">
-                  <option disabled>Select one</option>
-                  <option <?php if ($_SESSION["userNoti"] == "online"){ echo "selected";}?>>Online</option>
-                  <option <?php if ($_SESSION["userNoti"] == "busy"){ echo "selected";}?>>Busy</option>
-                  <option <?php if ($_SESSION["userNoti"] == "away"){ echo "selected";}?>>Away</option>
-                  <option <?php if ($_SESSION["userNoti"] == "offline"){ echo "selected";}?>>Offline</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="inputClientCompany">Client Company</label>
-                <input type="text" id="inputClientCompany" class="form-control" value="Deveint Inc">
-              </div>
-              <div class="form-group">
-                <label for="inputProjectLeader">Project Leader</label>
-                <input type="text" id="inputProjectLeader" class="form-control" value="Tony Chicken">
-              </div>
+              <!-- /.card-body -->
             </div>
-            <!-- /.card-body -->
+            <!-- /.card -->
           </div>
-          <!-- /.card -->
         </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <a href="#" class="btn btn-secondary">Cancel</a>
-          <input type="submit" value="Save Changes" class="btn btn-success float-right">
-        </div>
-      </div>
-    </section>
-    <!-- /.content -->
-  </div>
+      </section>
+      <!-- /.content -->
+    </div>
     <!-- End Content Wrapper -->
 
     <!-- Control Sidebar -->
