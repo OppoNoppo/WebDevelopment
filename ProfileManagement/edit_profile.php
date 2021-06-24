@@ -15,6 +15,8 @@ include "./includes/functions.inc.php";
 
 // End Includes
 
+refreshSession($conn, $_SESSION["userUUID"]);
+
 // $fullUrl = "http://$_SERVER[HOST_URL]$_SERVER[REQUESTED_URL]";   
 
 // End Variables

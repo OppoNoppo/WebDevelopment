@@ -166,7 +166,7 @@ function ValidatePwd($conn, $uuid, $pwdConfirm) {
     } 
 }
 
-function pwdMatchAdvanced($conn, $UUID, $pwd, $pwdRepeat) {
+function pwdMatchAdvanced($pwdNew, $pwdRepeat) {
     $result;
     $pwdNewHashed = password_hash($pwdNew, PASSWORD_DEFAULT);
     $PwdRepeatHashed = password_hash($pwdRepeat, PASSWORD_DEFAULT);
@@ -255,6 +255,7 @@ function saveProfile($conn, $uuid, $uid, $mail, $noti, $dsc, $status, $pwdNew) {
 
     refreshSession($conn, $uuid);
 }
+
 
 // 
 // 
