@@ -187,6 +187,7 @@ refreshSession($conn, $_SESSION["userUUID"]);
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+<<<<<<< Updated upstream
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <!-- /.container-fluid -->
@@ -271,9 +272,72 @@ refreshSession($conn, $_SESSION["userUUID"]);
                 </form>
               </div>
               <!-- /.card-body -->
+=======
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary">
+          <form method="POST" action="./includes/edit_profile.inc.php">
+            <div class="card-header">
+              <h3 class="card-title">General</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+            <div class="row">
+              <div class="form-group col-5">
+                <label for="uid">Username</label>
+                <input type="text" name="uid" id="uid" class="form-control" value="<?php echo $_SESSION['userUUID'];?>">
+              </div>
+              <div class="form-group col-4">
+                <label for="minidesc">Mini Description</label>
+                <input type="text" name="minidesc" id="minidesc" class="form-control" value="<?php echo $_SESSION["userMiniDesc"];?>">
+              </div>
+              <div class="form-group col-3">
+                <label for="inputStatus">Status</label>
+                <select name="notification" id="inputStatus" class="form-control custom-select">
+                  <option disabled>Select one</option>
+                  <option <?php if ($_SESSION["userNoti"] == "online"){ echo "selected";}?>>Online</option>
+                  <option <?php if ($_SESSION["userNoti"] == "busy"){ echo "selected";}?>>Busy</option>
+                  <option <?php if ($_SESSION["userNoti"] == "away"){ echo "selected";}?>>Away</option>
+                  <option <?php if ($_SESSION["userNoti"] == "offline"){ echo "selected";}?>>Offline</option>
+                </select>
+              </div>
+              </div>
+              <div class="form-group">
+                <label for="profileDescription">Profile Description</label>
+                <textarea name="description" id="profileDescription" class="form-control" rows="4">
+                <?php $GetUserInfo = GetUserInfo($conn, $_SESSION['userUUID']); echo $GetUserInfo["userMail"];?>
+                </textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="inputClientCompany">Client Company</label>
+                <input type="text" id="inputClientCompany" class="form-control" value="Deveint Inc">
+              </div>
+              <div class="form-group">
+                <label for="inputProjectLeader">Project Leader</label>
+                <input type="text" id="inputProjectLeader" class="form-control" value="Tony Chicken">
+              </div>
+>>>>>>> Stashed changes
             </div>
             <!-- /.card -->
           </div>
+<<<<<<< Updated upstream
+=======
+          </form>
+          <!-- /.card -->
+>>>>>>> Stashed changes
         </div>
       </section>
       <!-- /.content -->

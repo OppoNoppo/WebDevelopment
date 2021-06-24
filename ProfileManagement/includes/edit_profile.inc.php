@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< Updated upstream
 if (isset($_POST["submitsave"])) {
     session_start();
     $uuid = $_SESSION["userUUID"];
@@ -39,5 +40,41 @@ if (isset($_POST["submitsave"])) {
     saveProfile($conn, $uuid, $uid, $mail, $noti, $dsc, $status, $pwdNew);
 } else {
     header("location: ../login.php?error=nosubmit");
+=======
+if (isset($_POST["SUBMIT"])) {
+
+    $uidChange = $_POST["uid"];
+    $descChange = $_POST["description"];
+    $notiChange = $_POST["notification"];
+    // Form Viariables
+    $uuidProfile = $_SESSION["userUUID"];
+
+    // End Variables
+
+    require_once 'conn.inc.php';
+    require_once 'functions.inc.php';
+
+    // End Requires
+
+    if (changeNotification($conn, $uuidProfile, $notiChange) !== false){
+        header("Location: ../edit_profile.php?error=notiError");
+        exit();
+    }
+
+    if (changeDesc($conn, $uuidProfile, $descChange) !== false) {
+        header("Location: ../edit_profile.php?error=descError");
+        exit();
+    }
+
+    if (changeUid($conn, $uuidProfile, $descChange) !== false) {
+        header("Location: ../edit_profile.php?error=uidError");
+        exit();
+    }
+
+    saveChanges($conn, $uuidProfile, $uidChange, $descChange, $notiChange);
+}
+else {
+    header("location: ../edit_profile.php?error=nosubmit");
+>>>>>>> Stashed changes
     exit();
 }

@@ -124,6 +124,27 @@ function loginUser($conn, $uid, $pwd) {
         exit();
     }
 
+
+    // $sql = "SELECT userUUID FROM users WHERE userUid = ?;";
+    // $stmt = mysqli_stmt_init($conn);
+    // if(!mysqli_stmt_prepare($stmt, $sql)) {
+    //     header('Location: ../login.php?error=stmtfailed');
+    //     exit();
+    // }
+    // mysqli_stmt_bind_param($stmt, "s", $uid);
+    // mysqli_stmt_execute($stmt);
+    // $resultData = mysqli_stmt_get_result($stmt);
+
+    // if ($row = mysqli_fetch_assoc($resultData)) {
+    //     return $row;
+    // } else {
+    //     $result = false;
+    //     return $result;
+    // }
+    // mysqli_stmt_close($stmt);
+
+    // $profileExist = GetProfileInfo($conn, $row["userUUID"]);
+
     $pwdHashed = $uidExists["userPwd"];
     $checkPwd = password_verify($pwd, $pwdHashed);    
     if ($checkPwd === false ) {
@@ -135,6 +156,7 @@ function loginUser($conn, $uid, $pwd) {
         $_SESSION["userUid"] = $uidExists["userUid"];
         $_SESSION["userUUID"] = $uidExists["userUUID"];
         $_SESSION["userMail"] = $uidExists["userMail"];
+        // $_SESSION["userMiniDesc"] = $profileExist["profileMiniDesc"];
         $_SESSION["userNoti"] = $uidExists["userNoti"] ? $uidExists["userNoti"] : 'offline';
         $_SESSION["userStatus"] = $uidExists["userStatus"] ? $uidExists["userStatus"] : 'NULL';
         $_SESSION["loggedin"] = true;
@@ -284,5 +306,20 @@ function GetProfileInfo($conn, $uuid) {
     mysqli_stmt_close($stmt);
 }
 
+// 
+// 
+//  EDIT Profile 
+// 
+// 
 
-
+function saveChanges($conn, $uuidProfile, $uidChange, $descChange, $notiChange) {
+    $sql = "UPDATE profiles SET profileUid = ?, profileStatus = ?, profileDescription = ? WHERE userUUID = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    if(!mysqli_stmt_prepare($stmt, $sql)) {
+        header("Location: ../edit_profile.php?error=stmtfailed");
+        exit();
+    }
+    mysqli_stmt_bind_param($stmt, "ssss", $uidChange, $notiChange, $descChange, $uuidProfile);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+}
